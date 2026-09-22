@@ -1,460 +1,697 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Halima Said — Engineer, ethical hacker, community technologist. Nairobi." />
+<title>Halima Said</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f2ede4;
+    --paper-2:#eae2d3;
+    --paper-3:#e0d6c2;
+    --ink:#141210;
+    --ink-2:#2a2620;
+    --ink-3:#6b625a;
+    --line:#c9beac;
+    --oxide:#7a2818;
+    --oxide-2:#a63820;
+    --tide:#4a6b7a;
+    --tide-soft:#7a95a3;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Instrument Sans',sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.5;font-size:16px;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    position:relative;
+  }
+  a{color:var(--ink);text-decoration:none;transition:color .3s}
+  a:hover{color:var(--oxide-2)}
 
-  <title>Halema Portfolio</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+  /* Ambient cursor glow — lives on the body, follows pointer */
+  .aura{
+    position:fixed;pointer-events:none;
+    top:0;left:0;width:100vw;height:100vh;
+    z-index:1;opacity:.7;
+    background:radial-gradient(
+      circle 500px at var(--mx,50%) var(--my,50%),
+      rgba(74,107,122,.15),
+      transparent 60%
+    );
+    transition:opacity .8s ease;
+  }
+  @media (hover:none){.aura{opacity:.35}}
 
-  <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  /* Frame — content sits above aura */
+  .frame{
+    max-width:1200px;margin:0 auto;padding:0 40px;
+    position:relative;z-index:2;
+  }
+  @media (max-width:700px){.frame{padding:0 24px}}
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  /* Marginalia — vertical text on the sides */
+  .side-mark{
+    position:fixed;top:50%;
+    font-family:'Instrument Serif',serif;font-style:italic;
+    font-size:14px;color:var(--ink-3);
+    writing-mode:vertical-rl;letter-spacing:.3em;
+    z-index:5;pointer-events:none;
+    transform:translateY(calc(-50% + var(--scroll-shift,0px)));
+    transition:color .3s;
+  }
+  .side-mark.left{left:20px}
+  .side-mark.right{right:20px}
+  @media (max-width:900px){.side-mark{display:none}}
 
-  <!-- Vendor CSS Files -->
-  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  /* Nav */
+  nav{
+    position:fixed;top:32px;right:40px;z-index:20;
+    display:flex;gap:24px;
+    font-family:'Instrument Serif',serif;font-style:italic;
+    font-size:15px;
+  }
+  nav a{color:var(--ink-3);text-decoration:none;position:relative}
+  nav a::after{
+    content:"";position:absolute;left:0;right:0;bottom:-3px;
+    height:1px;background:var(--oxide-2);
+    transform:scaleX(0);transform-origin:right;
+    transition:transform .35s cubic-bezier(.4,0,.2,1);
+  }
+  nav a:hover{color:var(--oxide-2)}
+  nav a:hover::after{transform:scaleX(1);transform-origin:left}
+  @media (max-width:700px){nav{top:20px;right:24px;gap:16px;font-size:13px}}
 
-  <!-- Template Main CSS File -->
-  <link href="assets/css/style.css" rel="stylesheet">
+  /* Live clock — small, top-left */
+  .clock{
+    position:fixed;top:32px;left:40px;z-index:20;
+    font-family:'Instrument Serif',serif;font-style:italic;
+    font-size:14px;color:var(--ink-3);
+    display:flex;gap:12px;align-items:baseline;
+  }
+  .clock .dot{
+    display:inline-block;width:6px;height:6px;border-radius:50%;
+    background:var(--oxide-2);
+    animation:breathe 3s ease-in-out infinite;
+  }
+  @keyframes breathe{0%,100%{opacity:.4}50%{opacity:1}}
+  .clock-time{color:var(--ink);font-family:'Instrument Sans',sans-serif;font-style:normal;font-variant-numeric:tabular-nums;font-size:13px}
+  @media (max-width:700px){.clock{top:20px;left:24px;font-size:12px}.clock-time{font-size:11px}}
 
- 
+  /* Hero */
+  .room{
+    min-height:100vh;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:140px 0 80px;position:relative;
+  }
+  .room-label{
+    font-family:'Instrument Serif',serif;font-style:italic;
+    font-size:14px;color:var(--ink-3);
+    margin-bottom:48px;letter-spacing:.05em;
+  }
+  .room-label::before{content:"— "}
+  h1.name{
+    font-family:'Instrument Serif',serif;font-weight:400;
+    font-size:clamp(80px,15vw,220px);
+    line-height:.9;letter-spacing:-.04em;
+    color:var(--ink);margin-bottom:40px;
+    position:relative;
+  }
+  h1.name .swash{font-style:italic;color:var(--oxide);position:relative}
+  /* Subtle drifting motion behind the name — the "tide" */
+  h1.name::before{
+    content:"";position:absolute;left:-8%;right:-8%;top:20%;bottom:20%;
+    background:radial-gradient(ellipse at center,rgba(122,149,163,.12),transparent 70%);
+    z-index:-1;filter:blur(30px);
+    animation:tide 14s ease-in-out infinite;
+  }
+  @keyframes tide{
+    0%,100%{transform:translate(0,0) scale(1)}
+    33%{transform:translate(2%,-1%) scale(1.05)}
+    66%{transform:translate(-1%,2%) scale(.98)}
+  }
+  .subtitle{
+    font-family:'Instrument Serif',serif;font-style:italic;
+    font-size:clamp(20px,2.5vw,28px);
+    color:var(--ink-2);max-width:600px;
+    line-height:1.3;margin-bottom:60px;
+  }
+  .subtitle::before{content:"\201C ";color:var(--oxide);font-size:1.4em;line-height:0;vertical-align:-.15em}
+  .subtitle::after{content:" \201D";color:var(--oxide);font-size:1.4em;line-height:0;vertical-align:-.15em}
+  .compass{
+    display:flex;gap:32px;flex-wrap:wrap;
+    font-size:13px;color:var(--ink-3);letter-spacing:.1em;text-transform:uppercase;
+    padding-top:32px;border-top:1px solid var(--line);
+  }
+  .compass span strong{
+    color:var(--ink);font-weight:500;font-family:'Instrument Serif',serif;
+    font-style:italic;text-transform:none;letter-spacing:0;font-size:16px;
+    display:block;margin-top:4px;
+  }
+
+  /* Reveal-on-scroll base */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity 1s ease,transform 1s ease}
+  .reveal.on{opacity:1;transform:translateY(0)}
+
+  /* Section anatomy */
+  section{padding:160px 0;position:relative}
+  @media (max-width:700px){section{padding:100px 0}}
+
+  .caption{
+    font-family:'Instrument Serif',serif;font-style:italic;
+    font-size:14px;color:var(--ink-3);
+    margin-bottom:16px;letter-spacing:.05em;
+  }
+  .caption::before{content:"— "}
+  .caption strong{
+    color:var(--oxide-2);font-weight:400;font-style:normal;
+    font-variant:small-caps;letter-spacing:.15em;font-size:12px;
+  }
+  h2.piece{
+    font-family:'Instrument Serif',serif;font-weight:400;
+    font-size:clamp(44px,7vw,88px);
+    line-height:1;letter-spacing:-.03em;
+    margin-bottom:48px;color:var(--ink);
+    max-width:900px;
+  }
+  h2.piece em{color:var(--oxide);font-style:italic}
+
+  /* About */
+  .about-lede{
+    font-family:'Instrument Serif',serif;font-style:italic;
+    font-size:clamp(22px,3vw,32px);
+    line-height:1.35;color:var(--ink);
+    max-width:820px;margin-bottom:56px;
+  }
+  .about-lede em{color:var(--oxide);font-style:italic}
+  .about-facts{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:32px;padding-top:40px;border-top:1px solid var(--line);
+  }
+  .fact-label{
+    font-size:11px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--ink-3);margin-bottom:8px;
+  }
+  .fact-value{
+    font-family:'Instrument Serif',serif;font-style:italic;
+    font-size:18px;color:var(--ink);line-height:1.3;
+  }
+
+  /* Works — catalog rows with hover reveal */
+  .catalog{border-top:1px solid var(--line)}
+  .piece-row{
+    display:grid;grid-template-columns:60px 1fr auto;gap:40px;
+    padding:36px 0;border-bottom:1px solid var(--line);
+    align-items:baseline;
+    position:relative;cursor:pointer;
+    transition:padding .35s cubic-bezier(.4,0,.2,1);
+  }
+  .piece-row::before{
+    content:"";position:absolute;inset:0;
+    background:var(--paper-2);opacity:0;
+    transition:opacity .4s ease;z-index:-1;
+    border-radius:2px;
+    margin:0 -20px;
+  }
+  .piece-row:hover::before,.piece-row.open::before{opacity:1}
+  .piece-row:hover,.piece-row.open{padding:36px 20px;margin:0 -20px}
+  .piece-row:hover .piece-num,.piece-row.open .piece-num{color:var(--oxide-2)}
+  @media (max-width:700px){
+    .piece-row{grid-template-columns:40px 1fr;gap:20px}
+    .piece-row .piece-meta{display:none}
+  }
+  .piece-num{
+    font-family:'Instrument Serif',serif;font-style:italic;
+    font-size:24px;color:var(--ink-3);transition:color .3s;
+  }
+  .piece-info h3{
+    font-family:'Instrument Serif',serif;font-weight:400;
+    font-size:32px;line-height:1.1;margin-bottom:8px;
+    letter-spacing:-.01em;
+  }
+  .piece-info h3 a{color:var(--ink)}
+  .piece-info h3 a:hover{color:var(--oxide-2)}
+  .piece-info h3 .form{color:var(--ink-3);font-style:italic;font-size:.65em;margin-left:8px}
+  .piece-medium{
+    font-family:'Instrument Serif',serif;font-style:italic;
+    font-size:15px;color:var(--ink-3);
+  }
+  /* Expand: extra detail revealed on hover / tap */
+  .piece-detail{
+    max-height:0;overflow:hidden;
+    transition:max-height .5s cubic-bezier(.4,0,.2,1),margin .35s;
+    margin-top:0;
+  }
+  .piece-row:hover .piece-detail,.piece-row.open .piece-detail{max-height:200px;margin-top:16px}
+  .piece-detail-inner{
+    font-size:14px;color:var(--ink-2);
+    line-height:1.6;max-width:620px;
+    padding-top:14px;border-top:1px dashed var(--line);
+  }
+  .piece-detail-inner .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+  .piece-detail-inner .chip{
+    font-size:11px;letter-spacing:.05em;
+    padding:3px 10px;border:1px solid var(--line);
+    color:var(--ink-3);border-radius:100px;
+    background:rgba(255,255,255,.4);
+  }
+  .piece-meta{
+    font-size:13px;color:var(--ink-3);letter-spacing:.05em;
+    text-align:right;font-family:'Instrument Serif',serif;font-style:italic;
+  }
+  .piece-meta a{color:var(--ink-3);text-decoration:underline;text-underline-offset:3px}
+  .piece-meta a:hover{color:var(--oxide-2)}
+
+  /* Practice */
+  .practice{max-width:900px}
+  .entry{
+    display:grid;grid-template-columns:180px 1fr;gap:60px;
+    padding:32px 0;border-bottom:1px solid var(--line);
+    transition:padding .3s;
+  }
+  .entry:last-child{border-bottom:none}
+  .entry:hover{padding-left:12px}
+  @media (max-width:700px){.entry{grid-template-columns:1fr;gap:8px}.entry:hover{padding-left:0}}
+  .entry-when{
+    font-family:'Instrument Serif',serif;font-style:italic;
+    font-size:16px;color:var(--ink-3);padding-top:4px;
+  }
+  .entry-what{
+    font-family:'Instrument Serif',serif;font-weight:400;
+    font-size:22px;line-height:1.25;color:var(--ink);
+    letter-spacing:-.01em;
+  }
+  .entry-what em{color:var(--oxide);font-style:italic}
+  .entry-where{
+    font-size:14px;color:var(--ink-3);margin-top:6px;
+  }
+
+  /* Palette */
+  .palette{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:8px 24px;max-width:900px;
+  }
+  .swatch{
+    padding:16px 0;border-top:1px solid var(--line);
+    font-family:'Instrument Serif',serif;font-style:italic;
+    font-size:18px;color:var(--ink);
+    transition:transform .3s cubic-bezier(.4,0,.2,1),color .3s;
+    cursor:default;
+  }
+  .swatch::before{
+    content:"";display:inline-block;width:8px;height:8px;
+    background:var(--oxide);margin-right:12px;vertical-align:1px;
+    transition:transform .3s cubic-bezier(.4,0,.2,1),background .3s;
+  }
+  .swatch:hover{transform:translateY(-4px);color:var(--oxide-2)}
+  .swatch:hover::before{transform:rotate(45deg) scale(1.3);background:var(--tide)}
+
+  /* Closing */
+  .closing{padding:200px 0 120px}
+  .closing-line{
+    font-family:'Instrument Serif',serif;font-style:italic;
+    font-size:clamp(36px,6vw,72px);
+    line-height:1.1;letter-spacing:-.02em;
+    color:var(--ink);max-width:900px;margin-bottom:60px;
+  }
+  .closing-line em{color:var(--oxide)}
+  .signature{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:32px;padding-top:32px;border-top:1px solid var(--line);
+  }
+  .sig-item{font-size:14px;color:var(--ink-2)}
+  .sig-item strong{
+    font-family:'Instrument Serif',serif;font-style:italic;
+    font-weight:400;font-size:13px;color:var(--ink-3);
+    display:block;margin-bottom:6px;
+  }
+  .sig-item a{color:var(--ink);border-bottom:1px solid var(--line);padding-bottom:1px;transition:all .3s}
+  .sig-item a:hover{color:var(--oxide-2);border-color:var(--oxide-2)}
+
+  footer{
+    padding:60px 0 40px;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;
+    font-family:'Instrument Serif',serif;font-style:italic;
+    font-size:13px;color:var(--ink-3);
+    border-top:1px solid var(--line);
+  }
+
+  /* Accessibility */
+  a:focus-visible{outline:2px solid var(--oxide);outline-offset:4px;border-radius:2px}
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important;animation:none !important;scroll-behavior:auto !important}
+    .aura{display:none}
+    .reveal{opacity:1;transform:none}
+    h1.name::before{animation:none}
+    .clock .dot{animation:none}
+  }
+</style>
 </head>
-
 <body>
 
-  <!-- ======= Mobile nav toggle button ======= -->
-  <i class="bi bi-list mobile-nav-toggle d-xl-none"></i>
+<div class="aura" aria-hidden="true"></div>
+<div class="side-mark left">halema · portfolio · mmxxvi</div>
+<div class="side-mark right">nairobi · kenya · 01°17′ s</div>
 
-  <!-- ======= Header ======= -->
-  <header id="header">
-    <div class="d-flex flex-column">
+<div class="clock" aria-live="polite">
+  <span class="dot" aria-hidden="true"></span>
+  <span>Nairobi</span>
+  <span class="clock-time" id="clock">—</span>
+</div>
 
-      <div class="profile">
-        <img src="assets/img/Halema.jpg" alt="" class="img-fluid rounded-circle">
-        <h1 class="text-light"><a href="index.html">Halima Said</a></h1>
-        <div class="social-links mt-3 text-center">
-          <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-          <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-        </div>
+<nav>
+  <a href="#index">Index</a>
+  <a href="#studio">Studio</a>
+  <a href="#works">Works</a>
+  <a href="#writing">Writing</a>
+  <a href="#letter">Letter</a>
+</nav>
+
+<div class="frame" id="index">
+
+<section class="room">
+  <div class="room-label reveal">Portfolio, in five rooms</div>
+  <h1 class="name reveal">Halima<br>Said<span class="swash">.</span></h1>
+  <p class="subtitle reveal">Engineer, ethical hacker, community technologist. I build small, honest systems and keep them alive.</p>
+  <div class="compass reveal">
+    <span>Trade<strong>DevOps &amp; security</strong></span>
+    <span>Studio<strong>Nairobi</strong></span>
+    <span>Currently<strong>Available</strong></span>
+    <span>Certifying<strong>CEH · 2026</strong></span>
+  </div>
+</section>
+
+<section id="studio">
+  <div class="caption reveal"><strong>i.</strong> On the maker</div>
+  <h2 class="piece reveal">The through-line is <em>showing up</em>.</h2>
+  <div class="about">
+    <p class="about-lede reveal">
+      Cybersecurity graduate. Datadog monitor. Runbook writer. Voter roll clerk. Workshop coordinator for children in Nairobi since 2020, programme volunteer since 2018.
+    </p>
+    <p class="about-lede reveal">
+      Different rooms, one habit: <em>do the work carefully, and stay long enough to see it through.</em>
+    </p>
+    <div class="about-facts reveal">
+      <div>
+        <div class="fact-label">Formation</div>
+        <div class="fact-value">B.Sc. Information Systems Technology, Cybersecurity &amp; Digital Forensics — USIU-Africa</div>
       </div>
-
-      <nav id="navbar" class="nav-menu navbar">
-        <ul>
-          <li><a href="#hero" class="nav-link scrollto active"><i class="bx bx-home"></i> <span>Home</span></a></li>
-          <li><a href="#about" class="nav-link scrollto"><i class="bx bx-user"></i> <span>About</span></a></li>
-          <li><a href="#resume" class="nav-link scrollto"><i class="bx bx-file-blank"></i> <span>Resume</span></a></li>
-          <li><a href="#portfolio" class="nav-link scrollto"><i class="bx bx-book-content"></i> <span>Portfolio</span></a></li>
-          <li><a href="#services" class="nav-link scrollto"><i class="bx bx-server"></i> <span>Services</span></a></li>
-          <li><a href="#contact" class="nav-link scrollto"><i class="bx bx-envelope"></i> <span>Contact</span></a></li>
-        </ul>
-      </nav><!-- .nav-menu -->
-    </div>
-  </header><!-- End Header -->
-
-  <!-- ======= Hero Section ======= -->
-  <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
-    <div class="hero-container" data-aos="fade-in">
-      <h1>Halima Said</h1>
-      <p>I'm <span class="typed" data-typed-items="UX/UI Designer, Front-end Developer, Devops Engineer, Freelancer"></span></p>
-    </div>
-  </section><!-- End Hero -->
-
-  <main id="main">
-
-    <!-- ======= About Section ======= -->
-    <section id="about" class="about">
-      <div class="container">
-
-        <div class="section-title">
-          <h2>About</h2>
-          <p>I am an enthusiastic forward thinker in Information Systems. I am a team player with great
-            communication, organization and leadership skills that compliment my technical skills. I am result
-            oriented when it comes to customer experience and service.
-            </p>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-4" data-aos="fade-right">
-            <img src="assets/img/Halema.jpg" class="img-fluid" alt="">
-          </div>
-          <div class="col-lg-8 pt-4 pt-lg-0 content" data-aos="fade-left">
-            <h3>DEVOPS Engineer &amp; Front-end Web Developer.</h3>
-            <p class="fst-italic">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-              magna aliqua.
-            </p>
-            <div class="row">
-              <div class="col-lg-6">
-                <ul>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Birthday:</strong> <span>5 February 2000</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Website:</strong> <span>www.example.com</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Phone:</strong> <span>+254707372827 </span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>City:</strong> <span>Nairobi, Kenya</span></li>
-                </ul>
-              </div>
-              <div class="col-lg-6">
-                <ul>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Age:</strong> <span>23</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Degree:</strong> <span>Bachelors</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>PhEmailone:</strong> <span>hmohasaid@gmail.com</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Freelance:</strong> <span>Available</span></li>
-                </ul>
-              </div>
-            </div>
-            <p>
-              Officiis eligendi itaque labore et dolorum mollitia officiis optio vero. Quisquam sunt adipisci omnis et ut. Nulla accusantium dolor incidunt officia tempore. Et eius omnis.
-              Cupiditate ut dicta maxime officiis quidem quia. Sed et consectetur qui quia repellendus itaque neque. Aliquid amet quidem ut quaerat cupiditate. Ab et eum qui repellendus omnis culpa magni laudantium dolores.
-            </p>
-          </div>
-        </div>
-
+      <div>
+        <div class="fact-label">In progress</div>
+        <div class="fact-value">EC-Council Certified Ethical Hacker, 2026</div>
       </div>
-    </section><!-- End About Section -->
-
-
-    <!-- ======= Skills Section ======= -->
-    <section id="skills" class="skills section-bg">
-      <div class="container">
-
-        <div class="section-title">
-          <h2>Skills</h2>
-          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
-        </div>
-
-        <div class="row skills-content">
-
-          <div class="col-lg-6" data-aos="fade-up">
-
-            <div class="progress">
-              <span class="skill">HTML <i class="val">100%</i></span>
-              <div class="progress-bar-wrap">
-                <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </div>
-
-            <div class="progress">
-              <span class="skill">CSS <i class="val">80%</i></span>
-              <div class="progress-bar-wrap">
-                <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </div>
-
-            <div class="progress">
-              <span class="skill">JavaScript <i class="val">70%</i></span>
-              <div class="progress-bar-wrap">
-                <div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-
-            <div class="progress">
-              <span class="skill">PHP <i class="val">70%</i></span>
-              <div class="progress-bar-wrap">
-                <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </div>
-
-            <div class="progress">
-              <span class="skill">WordPress/CMS <i class="val">90%</i></span>
-              <div class="progress-bar-wrap">
-                <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </div>
-
-            <div class="progress">
-              <span class="skill">Photoshop <i class="val">55%</i></span>
-              <div class="progress-bar-wrap">
-                <div class="progress-bar" role="progressbar" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
+      <div>
+        <div class="fact-label">Also holds</div>
+        <div class="fact-value">IBM Data Science Practitioner</div>
       </div>
-    </section><!-- End Skills Section -->
-
-    <!-- ======= Resume Section ======= -->
-    <section id="resume" class="resume">
-      <div class="container">
-
-        <div class="section-title">
-          <h2>Resume</h2>
-          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-6" data-aos="fade-up">
-            <h3 class="resume-title">Sumary</h3>
-            <div class="resume-item pb-0">
-              <h4>Halima Said </h4>
-              <p><em>DevOps Engineer with a solid foundation in software development and a passion for automating and optimizing processes. Eager to leverage theoretical knowledge and hands-on experience in a professional setting </em></p>
-              <ul>
-                <li>Nairobi ,NRB , Kenya</li>
-                <li>+254707372827</li>
-                <li>hmohasaid@gmail.com</li>
-              </ul>
-            </div>
-
-            <h3 class="resume-title">Education</h3>
-            <div class="resume-item">
-              <h4>Bachelor of Information System Technolgy &amp; Cybersecurity and Forensics</h4>
-              <h5>2019 - 2023</h5>
-              <p><em>United States International University- A, Nairobi, NRB</em></p>
-              <p>Majored in Information System Technology, Minored in Cybersecurity and Forensics</p>
-            </div>
-           
-            <div class="resume-item">
-              <h4>Data Science Practioner &amp; Certificate</h4>
-              <h5>2021 - 2022</h5>
-              <p><em>IBM </em></p>
-              </div>
-              
-            <div class="resume-item">
-                <h4>UX/UI Design </h4>
-                <h5>2022-Ongoing</h5>
-                <p><em>Google Cousera </em></p>
-            </div>
-
-          </div>
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-            <h3 class="resume-title">Professional Experience</h3>
-            <div class="resume-item">
-              <h4>DevOps Engineer, OAKNET Limited</h4>
-              <h5>2023 - Present</h5>
-              <p><em>Upperhill, NAIROBI, NRB </em></p>
-              <ul>
-                <li>Interning devops Engineer</li>
-                <li>Deployment of Projects</li>
-                <li>Troubleshooting servers </li>
-                <li>Ensure quality and accuracy of the design</li>
-                <li>Overall network administration </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section><!-- End Resume Section -->
-
-    <!-- ======= Portfolio Section ======= -->
-    <section id="portfolio" class="portfolio section-bg">
-      <div class="container">
-
-        <div class="section-title">
-          <h2>Portfolio</h2>
-          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
-        </div>
-
-        <div class="row" data-aos="fade-up">
-          <div class="col-lg-12 d-flex justify-content-center">
-            <ul id="portfolio-flters">
-              <li data-filter="*" class="filter-active">All</li>
-              <li data-filter=".filter-app">App</li>
-              <li data-filter=".filter-card">Card</li>
-              <li data-filter=".filter-web">Web</li>
-            </ul>
-          </div>
-        </div>
-
-       
-
-          <!-- End Portfolio Section -->
-
-    <!-- ======= Services Section ======= -->
-    <section id="services" class="services">
-      <div class="container">
-
-        <div class="section-title">
-          <h2>Services</h2>
-          <p>I take pride in offering a comprehensive range of professional services tailored to meet the unique needs of my clients. </p>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up">
-            <div class="icon"><i class="bi bi-briefcase"></i></div>
-            <h4 class="title"><a href="">Deployment</a></h4>
-            <p class="description">Collaborated with the DevOps team to set up a scalable and secure infrastructure on cloud servers. Utilized Amazon Web Services (AWS) to configure virtual machines, load balancers, and auto-scaling groups.</p>
-            <p class="description">Continuous Integration and Deployment.</p>
-            <p class="description">Facilitate Testing.</p>
-          </div>
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="100">
-            <div class="icon"><i class="bi bi-card-checklist"></i></div>
-            <h4 class="title"><a href="">UX/UI Design </a></h4>
-            <p class="description">Creating intuitive and visually appealing digital experiences for users.</p>
-            <p class="description">Ability to create wireframes and prototypes that serve as blueprints for the structure and interaction of digital interfaces</p>
-          </div>
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="200">
-            <div class="icon"><i class="bi bi-bar-chart"></i></div>
-            <h4 class="title"><a href="">Website Maintenance And Support</a></h4>
-            <p class="description">Routine upkeep, monitoring, and updates necessary to ensure a website's optimal performance, security, and functionality.</p>
-          </div>
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="300">
-            <div class="icon"><i class="bi bi-binoculars"></i></div>
-            <h4 class="title"><a href="">Network Trouble Shooting</a></h4>
-            <p class="description">Network Configuration, Network Optimization and Network Security</p>
-          </div>
-          <div class="col-lg-4 col-md-6 icon-box" data-aos="fade-up" data-aos-delay="400">
-            <div class="icon"><i class="bi bi-brightness-high"></i></div>
-            <h4 class="title"><a href="">Data Analyst</a></h4>
-            <p class="description">Familiarity with business intelligence (BI) tools</p>
-            <p class="description">Ability to write efficient and reusable code for data cleaning, analysis, and automation tasks.</p>
-          </div>
-        </div>
-
-      </div>
-    </section><!-- End Services Section -->
-
-    <!-- ======= Testimonials Section ======= -->
-    <section id="testimonials" class="testimonials section-bg">
-      <div class="container">
-
-        <div class="section-title">
-          <h2>Testimonials</h2>
-          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
-        </div>
-
-        <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
-          <div class="swiper-wrapper">
-
-            <div class="swiper-slide">
-              <div class="testimonial-item" data-aos="fade-up">
-                <p>
-                  <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                  Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.
-                  <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                </p>
-                <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
-                <h3>Saul Goodman</h3>
-                <h4> CEO &amp; Founder</h4>
-              </div>
-            </div><!-- End testimonial item -->
-            
-          </div>
-          <div class="swiper-pagination"></div>
-        </div>
-
-      </div>
-    </section><!-- End Testimonials Section -->
-
-    <!-- ======= Contact Section ======= -->
-    <section id="contact" class="contact">
-      <div class="container">
-
-        <div class="section-title">
-          <h2>Contact</h2>
-          <p>Thank you for visiting my portfolio! I am excited to connect with you and discuss potential opportunities, collaborations, or projects. I am currently available for freelance projects and open to discussing potential collaborations. I am also open to exploring full-time employment opportunities. Please feel free to reach out to me using the contact information below</p>
-        </div>
-
-        <div class="row" data-aos="fade-in">
-
-          <div class="col-lg-5 d-flex align-items-stretch">
-            <div class="info">
-              <div class="address">
-                <i class="bi bi-geo-alt"></i>
-                <h4>Location:</h4>
-                <p>NAIROBI,NRB </p>
-              </div>
-
-              <div class="email">
-                <i class="bi bi-envelope"></i>
-                <h4>Email:</h4>
-                <p>hmohasaid@gmail.com</p>
-              </div>
-
-              <div class="phone">
-                <i class="bi bi-phone"></i>
-                <h4>Call:</h4>
-                <p>+254707372827</p>
-              </div>
-
-              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7976060558617!2d36.80507431475404!3d-1.2960519990547075!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f10c1c9241b31%3A0xc72fae60451221c1!2sGA%20Insurance%20Company%20Kenya%20Limited%20(Head%20Office)!5e0!3m2!1sen!2ske!4v1684497011014!5m2!1sen!2ske" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
-
-          </div>
-
-          <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
-              <div class="row">
-                <div class="form-group col-md-6">
-                  <label for="name">Your Name</label>
-                  <input type="text" name="name" class="form-control" id="name" required>
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="name">Your Email</label>
-                  <input type="email" class="form-control" name="email" id="email" required>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="name">Subject</label>
-                <input type="text" class="form-control" name="subject" id="subject" required>
-              </div>
-              <div class="form-group">
-                <label for="name">Message</label>
-                <textarea class="form-control" name="message" rows="10" required></textarea>
-              </div>
-              <div class="my-3">
-                <div class="loading">Loading</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Your message has been received. Thank you!</div>
-              </div>
-              <div class="text-center"><button type="submit">Send Message</button></div>
-            </form>
-          </div>
-
-        </div>
-
-      </div>
-    </section><!-- End Contact Section -->
-
-  </main><!-- End #main -->
-
-  <!-- ======= Footer ======= -->
-  <footer id="footer">
-    <div class="container">
-      <div class="copyright">
-        &copy; Copyright <strong><span>@Halema</span></strong>
-      </div>
-      <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/ -->
-        Designed by <a href="https://bootstrapmade.com/">Halema</a>
+      <div>
+        <div class="fact-label">Speaks</div>
+        <div class="fact-value">English, Kiswahili, French, Arabic</div>
       </div>
     </div>
-  </footer><!-- End  Footer -->
+  </div>
+</section>
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<section id="works">
+  <div class="caption reveal"><strong>ii.</strong> Selected works</div>
+  <h2 class="piece reveal">Three repositories, <em>one long argument</em>.</h2>
+  <div class="catalog reveal">
 
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-  <script src="assets/vendor/aos/aos.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets/vendor/typed.js/typed.min.js"></script>
-  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
+    <div class="piece-row" tabindex="0">
+      <div class="piece-num">i.</div>
+      <div class="piece-info">
+        <h3><a href="https://github.com/halemaa/notes-api" target="_blank" rel="noopener">notes-api</a><span class="form">— working system</span></h3>
+        <p class="piece-medium">Flask, Postgres, Nginx. CI/CD, container image, Kubernetes.</p>
+        <div class="piece-detail">
+          <div class="piece-detail-inner">
+            End-to-end containerised REST API. Full CI/CD in GitHub Actions — lint, tests, secret scan, image scan, publish to GHCR. Production-style Kubernetes manifests validated on a local cluster.
+            <div class="chips">
+              <span class="chip">Docker</span>
+              <span class="chip">Kubernetes</span>
+              <span class="chip">GitHub Actions</span>
+              <span class="chip">Trivy</span>
+              <span class="chip">Gitleaks</span>
+              <span class="chip">Flask</span>
+              <span class="chip">Postgres</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="piece-meta">
+        MMXXVI<br>
+        <a href="https://github.com/halemaa/notes-api" target="_blank" rel="noopener">view →</a>
+      </div>
+    </div>
 
-  <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
+    <div class="piece-row" tabindex="0">
+      <div class="piece-num">ii.</div>
+      <div class="piece-info">
+        <h3><a href="https://github.com/halemaa/devops-hale" target="_blank" rel="noopener">devops-hale</a><span class="form">— study in public</span></h3>
+        <p class="piece-medium">Kubernetes, Terraform, CI/CD, Linux, Git internals. Diagrams throughout.</p>
+        <div class="piece-detail">
+          <div class="piece-detail-inner">
+            Structured DevOps knowledge base with architecture diagrams. Covers Kubernetes internals, Terraform, GitHub Actions patterns, Linux administration, and networking. Automated CI lints every commit.
+            <div class="chips">
+              <span class="chip">Kubernetes</span>
+              <span class="chip">Terraform</span>
+              <span class="chip">CI/CD</span>
+              <span class="chip">Linux</span>
+              <span class="chip">Networking</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="piece-meta">
+        MMXXVI<br>
+        <a href="https://github.com/halemaa/devops-hale" target="_blank" rel="noopener">view →</a>
+      </div>
+    </div>
+
+    <div class="piece-row" tabindex="0">
+      <div class="piece-num">iii.</div>
+      <div class="piece-info">
+        <h3><a href="https://github.com/halemaa/cybersec-hale" target="_blank" rel="noopener">cybersec-hale</a><span class="form">— study in public</span></h3>
+        <p class="piece-medium">OWASP, MITRE ATT&amp;CK, SIEM, cryptography, Nmap, SQL injection.</p>
+        <div class="piece-detail">
+          <div class="piece-detail-inner">
+            Cybersecurity fundamentals — CIA triad, OWASP Top 10, MITRE ATT&amp;CK, SIEM, cryptography, Nmap, SQL injection. Each topic includes diagrams and detection mappings.
+            <div class="chips">
+              <span class="chip">OWASP</span>
+              <span class="chip">MITRE ATT&amp;CK</span>
+              <span class="chip">SIEM</span>
+              <span class="chip">Cryptography</span>
+              <span class="chip">Nmap</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="piece-meta">
+        MMXXVI<br>
+        <a href="https://github.com/halemaa/cybersec-hale" target="_blank" rel="noopener">view →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="caption reveal"><strong>iii.</strong> Practice</div>
+  <h2 class="piece reveal">Where the <em>work has happened</em>.</h2>
+  <div class="practice reveal">
+
+    <div class="entry">
+      <div class="entry-when">2026, Jan–Apr</div>
+      <div>
+        <div class="entry-what">Voter Registration Clerk — <em>IEBC</em></div>
+        <div class="entry-where">Records held under statutory procedure.</div>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-when">2024–25</div>
+      <div>
+        <div class="entry-what">Administrative IT — <em>Pwani Telecoms</em></div>
+        <div class="entry-where">First-line support at Mombasa's first ISP.</div>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-when">2023, May–Dec</div>
+      <div>
+        <div class="entry-what">DevOps Engineer — <em>Oaknet Business</em></div>
+        <div class="entry-where">Cloud monitoring in Datadog. Runbooks. Audit reports.</div>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-when">2020, ongoing</div>
+      <div>
+        <div class="entry-what">Tech Coordinator — <em>AfricanStemGirl</em></div>
+        <div class="entry-where">Digital literacy workshops for children, 7–17.</div>
+      </div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-when">2018, ongoing</div>
+      <div>
+        <div class="entry-what">Programme Volunteer — <em>Omeriye Foundation</em></div>
+        <div class="entry-where">Education and disaster-response support.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="writing">
+  <div class="caption reveal"><strong>iv.</strong> Palette</div>
+  <h2 class="piece reveal">The tools I <em>actually pick up</em>.</h2>
+  <div class="palette reveal">
+    <div class="swatch">Docker</div>
+    <div class="swatch">Kubernetes</div>
+    <div class="swatch">GitHub Actions</div>
+    <div class="swatch">Trivy</div>
+    <div class="swatch">Gitleaks</div>
+    <div class="swatch">Datadog</div>
+    <div class="swatch">Nginx</div>
+    <div class="swatch">PostgreSQL</div>
+    <div class="swatch">Flask</div>
+    <div class="swatch">Terraform</div>
+    <div class="swatch">Linux</div>
+    <div class="swatch">Python</div>
+    <div class="swatch">Bash</div>
+    <div class="swatch">Git</div>
+    <div class="swatch">OWASP</div>
+    <div class="swatch">MITRE ATT&amp;CK</div>
+  </div>
+</section>
+
+<section id="letter" class="closing">
+  <div class="caption reveal"><strong>v.</strong> A letter, if you'd like</div>
+  <p class="closing-line reveal">
+    If you're building something with <em>care and small teams,</em> I would like to hear about it.
+  </p>
+  <div class="signature reveal">
+    <div class="sig-item">
+      <strong>Correspondence</strong>
+      <a href="mailto:hmohasaid@gmail.com">hmohasaid@gmail.com</a>
+    </div>
+    <div class="sig-item">
+      <strong>Practice</strong>
+      <a href="https://github.com/halemaa" target="_blank" rel="noopener">github.com/halemaa</a>
+    </div>
+    <div class="sig-item">
+      <strong>Professional</strong>
+      <a href="https://linkedin.com/in/halemamohamed2000" target="_blank" rel="noopener">linkedin.com/in/halemamohamed2000</a>
+    </div>
+    <div class="sig-item">
+      <strong>Full details</strong>
+      <a href="mailto:hmohasaid@gmail.com?subject=CV%20Request">CV on request</a>
+    </div>
+    <div class="sig-item">
+      <strong>Studio</strong>
+      Nairobi, Kenya
+    </div>
+    <div class="sig-item">
+      <strong>Telephone</strong>
+      <a href="tel:+254707372827">+254 707 372 827</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>Set in Instrument Serif &amp; Instrument Sans</div>
+  <div>Built by hand · MMXXVI</div>
+</footer>
+
+</div>
+
+<script>
+  // Respect reduced-motion — bail out of all JS motion effects
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 1. Cursor-tracking aura
+  if (!reduce && window.matchMedia('(hover: hover)').matches) {
+    const aura = document.querySelector('.aura');
+    let tx = window.innerWidth / 2, ty = window.innerHeight / 2;
+    let cx = tx, cy = ty;
+    window.addEventListener('pointermove', (e) => {
+      tx = e.clientX; ty = e.clientY;
+    }, { passive: true });
+    const animateAura = () => {
+      cx += (tx - cx) * 0.08;
+      cy += (ty - cy) * 0.08;
+      aura.style.setProperty('--mx', cx + 'px');
+      aura.style.setProperty('--my', cy + 'px');
+      requestAnimationFrame(animateAura);
+    };
+    animateAura();
+  }
+
+  // 2. Marginalia scroll shift
+  if (!reduce) {
+    const marks = document.querySelectorAll('.side-mark');
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const shift = (window.scrollY * 0.08) % 200;
+          marks.forEach(m => m.style.setProperty('--scroll-shift', shift + 'px'));
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+
+  // 3. Reveal on scroll
+  if ('IntersectionObserver' in window && !reduce) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('on');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('on'));
+  }
+
+  // 4. Live Nairobi clock — updates every minute
+  const clockEl = document.getElementById('clock');
+  const updateClock = () => {
+    const now = new Date();
+    const opts = { timeZone: 'Africa/Nairobi', hour: '2-digit', minute: '2-digit', hour12: false };
+    clockEl.textContent = now.toLocaleTimeString('en-GB', opts) + ' EAT';
+  };
+  updateClock();
+  setInterval(updateClock, 60000);
+
+  // 5. Tap-to-expand for project cards (mobile / keyboard)
+  document.querySelectorAll('.piece-row').forEach(row => {
+    row.addEventListener('click', (e) => {
+      // Don't toggle when the actual link is clicked
+      if (e.target.tagName === 'A') return;
+      row.classList.toggle('open');
+    });
+    row.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        if (e.target === row) {
+          e.preventDefault();
+          row.classList.toggle('open');
+        }
+      }
+    });
+  });
+</script>
 
 </body>
-
 </html>
